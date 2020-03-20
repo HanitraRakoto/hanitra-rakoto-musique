@@ -1,0 +1,15 @@
+.linkResult {
+    text-decoration: none;
+}
+
+.itemResult:hover {
+    background-color: #DADADA;
+}
+
+.itemResult:active {
+    background-color: #B8B8B8;
+}
+
+.nameResult {
+    color : black;
+}
