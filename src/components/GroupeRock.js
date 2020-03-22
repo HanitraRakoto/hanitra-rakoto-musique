@@ -32,8 +32,7 @@ import PlaceIcon from '@material-ui/icons/Place';
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import PeopleIcon from '@material-ui/icons/People';
-import MicIcon from '@material-ui/icons/Mic';
-import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import CakeIcon from '@material-ui/icons/Cake';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 //App bar
@@ -184,13 +183,11 @@ const GroupeRock = (props) => {
     locationInfo: [],
     genres: [],
     labels: [],
-    nameVariations: [],
-    urls: [],
-    recordLabel: [],
     name : '',
     picture : { medium : ''},
     abstract : '',
-    deezerFans : 0
+    deezerFans : 0,
+    lifeSpan : { begin : ''},
   });
   async function fetchData(url) {
     console.log("Getting data from server");
@@ -226,14 +223,6 @@ const GroupeRock = (props) => {
 
   let listeDesLabels = metallica.labels.map(label => (
     <div>{label}<br/></div>
-  ));
-
-  let listeDesVariations = metallica.nameVariations.map(nameVariation => (
-    <div>{nameVariation}<br/></div>
-  ));
-
-  let listeDesRecordLabel = metallica.recordLabel.map(rl => (
-    <div>{rl}<br/></div>
   ));
 
   return (
@@ -346,21 +335,42 @@ const GroupeRock = (props) => {
                   <Grid container spacing={3}>
                     <Grid item xs={4} sm={4}>
                       <List className={classesListDivider.root}>
-                        <ListItem>
+                      <ListItem>
                           <ListItemAvatar>
                           <Avatar className="icon">
-                            <PlaceIcon/>
+                            <CakeIcon />
                           </Avatar>
                           </ListItemAvatar>
-                          <ListItemText 
-                          primary="Lieu" 
+                          <ListItemText primary="Date de naissance" 
                           secondary={
                             <React.Fragment>
-                            {listeDesLocations}
+                            {(() => {
+                              if (metallica.lifeSpan !== undefined) {
+                                  return metallica.lifeSpan.begin;
+                              }
+                            })()}
                             </React.Fragment>
                           } />
                         </ListItem>
                         <Divider variant="inset" component="li" />
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
+                            <LibraryMusicIcon />
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText 
+                          primary="Genres" 
+                          secondary={
+                            <React.Fragment>
+                            {listeDesGenres}
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                      </List>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <List className={classesListDivider.root}>
                         <ListItem>
                           <ListItemAvatar>
                           <Avatar className="icon">
@@ -382,57 +392,25 @@ const GroupeRock = (props) => {
                         <ListItem>
                           <ListItemAvatar>
                           <Avatar className="icon">
+                            <PlaceIcon/>
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText 
+                          primary="Lieu" 
+                          secondary={
+                            <React.Fragment>
+                            {listeDesLocations}
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
                             <PeopleIcon />
                           </Avatar>
                           </ListItemAvatar>
                           <ListItemText primary="Fans deezer" secondary={metallica.deezerFans} />
-                        </ListItem>
-                        <Divider variant="inset" component="li" />
-                        <ListItem>
-                          <ListItemAvatar>
-                          <Avatar className="icon">
-                            <PermIdentityIcon />
-                          </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText 
-                          primary="Variations noms" 
-                          secondary={
-                            <React.Fragment>
-                            {listeDesVariations}
-                            </React.Fragment>
-                          } />
-                        </ListItem>
-                      </List>
-                    </Grid>
-                    <Grid item xs={4} sm={4}>
-                      <List className={classesListDivider.root}>
-                        <ListItem>
-                          <ListItemAvatar>
-                          <Avatar className="icon">
-                            <LibraryMusicIcon />
-                          </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText 
-                          primary="Genres" 
-                          secondary={
-                            <React.Fragment>
-                            {listeDesGenres}
-                            </React.Fragment>
-                          } />
-                        </ListItem>
-                        <Divider variant="inset" component="li" />
-                        <ListItem>
-                          <ListItemAvatar>
-                          <Avatar className="icon">
-                            <MicIcon />
-                          </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText primary="Record Label" 
-                          secondary={
-                            <React.Fragment>
-                            {listeDesRecordLabel}
-                            </React.Fragment>
-                          } />
                         </ListItem>
                       </List>
                     </Grid>
