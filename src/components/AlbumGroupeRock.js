@@ -4,12 +4,9 @@ import Paper from "@material-ui/core/Paper";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 
 const useStylesGrid = makeStyles(theme => ({
     root: {
@@ -51,7 +48,7 @@ export default function AlbumGroupeRock({album}) {
             <Grid item xs={6} sm={4}>
             {(() => {
                 if (album.cover !== undefined) {
-                    return <img src={album.cover.medium}/>;
+                    return <img src={album.cover.medium} alt={album.title}/>;
                 }
             })()}
             </Grid>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -7,30 +7,21 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-
+import { fade, makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
-import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
-import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-
 import "./GroupeRock.css";
-
-//import metallica from "../data/mettalica";
 import MembreGroupeRock from "./MembreGroupeRock";
 import AlbumGroupeRock from './AlbumGroupeRock';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -41,13 +32,72 @@ import PlaceIcon from '@material-ui/icons/Place';
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import PeopleIcon from '@material-ui/icons/People';
-import LinkIcon from '@material-ui/icons/Link';
 import MicIcon from '@material-ui/icons/Mic';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-const useStylesCard = makeStyles(theme => ({
-  root: {
-    //maxWidth: 345,
+//App bar
+const useStylesAppBar = makeStyles(theme => ({
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
 }));
 
@@ -62,55 +112,7 @@ const useStylesGrid = makeStyles(theme => ({
   },
 }));
 
-//Expansion panel
-const ExpansionPanel = withStyles({
-  root: {
-    border: '1px solid rgba(0, 0, 0, .125)',
-    boxShadow: 'none',
-    '&:not(:last-child)': {
-      borderBottom: 0,
-    },
-    '&:before': {
-      display: 'none',
-    },
-    '&$expanded': {
-      margin: 'auto',
-    },
-  },
-  expanded: {},
-})(MuiExpansionPanel);
-
-const ExpansionPanelSummary = withStyles({
-  root: {
-    backgroundColor: 'rgba(0, 0, 0, .03)',
-    borderBottom: '1px solid rgba(0, 0, 0, .125)',
-    marginBottom: -1,
-    minHeight: 56,
-    '&$expanded': {
-      minHeight: 56,
-    },
-  },
-  content: {
-    '&$expanded': {
-      margin: '12px 0',
-    },
-  },
-  expanded: {},
-})(MuiExpansionPanelSummary);
-
-const ExpansionPanelDetails = withStyles(theme => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiExpansionPanelDetails);
-//Expansion panel (fin)
-
 //Tab
-const useStylesTab = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
-});
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
@@ -163,44 +165,17 @@ const useStylesListDivider = makeStyles(theme => ({
 }));
 //List divider fin
 
-/*function getDataFromServer(url) {
-  // utiliser fetch pour récupérer les données
-  console.log("Getting data from server");
-  fetch(url)
-    .then(response => response.json())
-    .then(reponseJavaScript => {
-      console.log("Ty le données eh");
-      console.log(reponseJavaScript);
-      return reponseJavaScript;
-    });
-};*/
-
 const GroupeRock = (props) => {
-
-  const classesCard = useStylesCard();
+  const classesAppBar = useStylesAppBar();
   const classesGrid = useStylesGrid();
-  //Expansion panel
-  const [expanded, setExpanded] = React.useState('panel1');
-  const handleChange = panel => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
-  };
-  //Expansion panel (fin)
   //Tab
-  const classesTab = useStylesTab();
   const [value, setValue] = React.useState(0);
   const handleChangeTab = (event, newValue) => {
     setValue(newValue);
   };
   //Tab fin
-  //Table
   const classesTable = useStylesTable();
-  //Table fin
-  //List divider
   const classesListDivider = useStylesListDivider();
-  //List divider fin
-
-  //params
-  const [nom, setNom] = React.useState('');
 
   //get data from server
   const [metallica, setMetallica] = React.useState({ 
@@ -228,7 +203,6 @@ const GroupeRock = (props) => {
       });
   }
   useEffect(() => {
-    console.log("props.match.params.nom");
     console.log(props.match.params.nom);
     fetchData("https://wasabi.i3s.unice.fr/search/artist/"+props.match.params.nom);
   }, []);
@@ -258,216 +232,260 @@ const GroupeRock = (props) => {
     <div>{nameVariation}<br/></div>
   ));
 
-  let listeDesUrls = metallica.urls.map(url => (
-    <div>{url}<br/></div>
-  ));
-
   let listeDesRecordLabel = metallica.recordLabel.map(rl => (
     <div>{rl}<br/></div>
   ));
 
   return (
-    <Card className={classesCard.root}>
-        <CardMedia style={{width:300}}
-          className="media"
-          component="img"
-          alt={metallica.name}
-          height="300"
-          image={metallica.picture.medium}
-          title={metallica.name}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {metallica.name}
+    <div className={classesAppBar.grow}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classesAppBar.menuButton}
+            color="inherit"
+            aria-label="open drawer"
+          >
+            <a href="/" class="iconRetour"><ArrowBackIcon /></a>
+          </IconButton>
+          <Typography className={classesAppBar.title} variant="h6" noWrap>
+            Groupe Rock
           </Typography>
-          <Paper className={classesTab.root}>
-            <Tabs
-              value={value}
-              onChange={handleChangeTab}
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-            >
-              <Tab label="Description" {...a11yProps(0)}/>
-              {(() => {
-                if (metallica.members.length !== 0) {
-                    return <Tab label="Membres" />;
-                }
-              })()}
-              <Tab label="Albums" />
-            </Tabs>
-            <TabPanel value={value} index={0}>
-              {metallica.abstract}
-              {/* liste locationInfo, liste genres, liste labels, deezerFans, liste nameVariations, liste urls, liste recordLabel */}
-              <Grid item xs={12} sm={12}>
-                <Grid container spacing={3}>
-                  <Grid item xs={4} sm={4}>
-                    <List className={classesListDivider.root}>
-                      <ListItem>
-                        <ListItemAvatar>
-                        <Avatar>
-                          <PlaceIcon />
-                        </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText 
-                        primary="Lieu" 
-                        secondary={
-                          <React.Fragment>
-                          {listeDesLocations}
-                          </React.Fragment>
-                        } />
-                      </ListItem>
-                      <Divider variant="inset" component="li" />
-                      <ListItem>
-                        <ListItemAvatar>
-                        <Avatar>
-                          <LibraryMusicIcon />
-                        </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText 
-                        primary="Genres" 
-                        secondary={
-                          <React.Fragment>
-                          {listeDesGenres}
-                          </React.Fragment>
-                        } />
-                      </ListItem>
-                      <Divider variant="inset" component="li" />
-                      <ListItem>
-                        <ListItemAvatar>
-                        <Avatar>
-                          <GroupWorkIcon />
-                        </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText 
-                        primary="Labels" 
-                        secondary={
-                          <React.Fragment>
-                          {listeDesLabels}
-                          </React.Fragment>
-                        } />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                  <Grid item xs={4} sm={4}>
-                    <List className={classesListDivider.root}>
-                      <ListItem>
-                        <ListItemAvatar>
-                        <Avatar>
-                          <PeopleIcon />
-                        </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary="Fans deezer" secondary={metallica.deezerFans} />
-                      </ListItem>
-                      <Divider variant="inset" component="li" />
-                      <ListItem>
-                        <ListItemAvatar>
-                        <Avatar>
-                          <LinkIcon />
-                        </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary="Urls" 
-                        secondary={
-                          <React.Fragment>
-                          {listeDesUrls}
-                          </React.Fragment>
-                        } />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                  <Grid item xs={4} sm={4}>
-                    <List className={classesListDivider.root}>
-                      <ListItem>
-                        <ListItemAvatar>
-                        <Avatar>
-                          <PermIdentityIcon />
-                        </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText 
-                        primary="Variations nom" 
-                        secondary={
-                          <React.Fragment>
-                          {listeDesVariations}
-                          </React.Fragment>
-                        } />
-                      </ListItem>
-                      <Divider variant="inset" component="li" />
-                      <ListItem>
-                        <ListItemAvatar>
-                        <Avatar>
-                          <MicIcon />
-                        </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary="Record Label" 
-                        secondary={
-                          <React.Fragment>
-                          {listeDesRecordLabel}
-                          </React.Fragment>
-                        } />
-                      </ListItem>
-                    </List>
+        </Toolbar>
+      </AppBar>
+      <Card>
+          <CardMedia style={{width:300}}
+            className="media"
+            component="img"
+            alt={metallica.name}
+            height="300"
+            image={metallica.picture.medium}
+            title={metallica.name}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h1">
+              {metallica.name}
+            </Typography>
+            <div className="urls">
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlWikipedia}><img src="/wikipedia.png" alt="Wikipedia" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlOfficialWebsite}><img src="/officialwebsite.jpeg" alt="Official Website" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlFacebook}><img src="/facebook.png" alt="Facebook" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlMySpace}><img src="/myspace.png" alt="My Space" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlTwitter}><img src="/twitter.png" alt="Twitter" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlAmazon}><img src="/amazon.png" alt="Amazon" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlITunes}><img src="/itunes.png" alt="ITunes" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlAllmusic}><img src="/allmusic.png" alt="All music" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlDiscogs}><img src="/discogs.png" alt="Discogs" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlMusicBrainz}><img src="/musicbrainz.png" alt="Music Brainz" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlYouTube}><img src="/youtube.png" alt="YouTube" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlSpotify}><img src="/spotify.png" alt="Spotify" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlPureVolume}><img src="/purevolume.png" alt="PureVolume" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlRateYourMusic}><img src="/rateyourmusic.png" alt="RateYourMusic" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlSoundCloud}><img src="/soundcloud.png" alt="SoundCloud" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlDeezer}><img src="/deezer.png" alt="Deezer" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlLastFm}><img src="/lastfm.png" alt="LastFm" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlInstagram}><img src="/instagram.png" alt="Instagram" width="100%"/></a>
+              </Avatar>&nbsp;&nbsp;
+              <Avatar variant="square" className="logoAvatar">
+                <a href={metallica.urlGooglePlus}><img src="/googleplus.png" alt="Google+" width="100%"/></a>
+              </Avatar>
+            </div>
+              <Tabs
+                value={value}
+                onChange={handleChangeTab}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+              >
+                <Tab label="Description" {...a11yProps(0)}/>
+                {(() => {
+                  if (metallica.members.length !== 0) {
+                      return <Tab label="Membres" />;
+                  }
+                })()}
+                <Tab label="Albums" />
+              </Tabs>
+              <TabPanel value={value} index={0}>
+                {metallica.abstract}
+                <Grid item xs={12} sm={12}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={4} sm={4}>
+                      <List className={classesListDivider.root}>
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
+                            <PlaceIcon/>
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText 
+                          primary="Lieu" 
+                          secondary={
+                            <React.Fragment>
+                            {listeDesLocations}
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
+                            <GroupWorkIcon />
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText 
+                          primary="Labels" 
+                          secondary={
+                            <React.Fragment>
+                            {listeDesLabels}
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                      </List>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <List className={classesListDivider.root}>
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
+                            <PeopleIcon />
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText primary="Fans deezer" secondary={metallica.deezerFans} />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
+                            <PermIdentityIcon />
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText 
+                          primary="Variations noms" 
+                          secondary={
+                            <React.Fragment>
+                            {listeDesVariations}
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                      </List>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <List className={classesListDivider.root}>
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
+                            <LibraryMusicIcon />
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText 
+                          primary="Genres" 
+                          secondary={
+                            <React.Fragment>
+                            {listeDesGenres}
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                        <ListItem>
+                          <ListItemAvatar>
+                          <Avatar className="icon">
+                            <MicIcon />
+                          </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText primary="Record Label" 
+                          secondary={
+                            <React.Fragment>
+                            {listeDesRecordLabel}
+                            </React.Fragment>
+                          } />
+                        </ListItem>
+                      </List>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </TabPanel>
-            {(() => {
-                if (metallica.members.length !== 0) {
+              </TabPanel>
+              {(() => {
+                  if (metallica.members.length !== 0) {
+                      return <TabPanel value={value} index={1}>
+                              <TableContainer component={Paper}>
+                                <Table className={classesTable.table} aria-label="customized table">
+                                  <TableHead>
+                                    <TableRow>
+                                      <StyledTableCell>Nom</StyledTableCell>
+                                      <StyledTableCell align="right">Vrai nom</StyledTableCell>
+                                      <StyledTableCell align="right">Instruments</StyledTableCell>
+                                      <StyledTableCell align="right">Debut</StyledTableCell>
+                                      <StyledTableCell align="right">Fin</StyledTableCell>
+                                      <StyledTableCell align="right">Sexe</StyledTableCell>
+                                      <StyledTableCell align="right">Date de naissance</StyledTableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {listeDesMembres}
+                                  </TableBody>
+                                </Table>
+                              </TableContainer>
+                            </TabPanel>
+                  }
+                })()}
+              
+                {(() => {
+                  if (metallica.members.length !== 0) {
+                      return <TabPanel value={value} index={2}>
+                              <div className={classesGrid.root}>
+                                <Grid container spacing={3}>
+                                  {listeDesAlbums}
+                                </Grid>
+                              </div>
+                            </TabPanel>;
+                  } else {
                     return <TabPanel value={value} index={1}>
-              <TableContainer component={Paper}>
-                <Table className={classesTable.table} aria-label="customized table">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell>Name</StyledTableCell>
-                      <StyledTableCell align="right">Real Name</StyledTableCell>
-                      <StyledTableCell align="right">Instruments</StyledTableCell>
-                      <StyledTableCell align="right">Begin</StyledTableCell>
-                      <StyledTableCell align="right">End</StyledTableCell>
-                      <StyledTableCell align="right">Gender</StyledTableCell>
-                      {/*<StyledTableCell align="right">Abstract</StyledTableCell>*/}
-                      <StyledTableCell align="right">Name Variations</StyledTableCell>
-                      <StyledTableCell align="right">Birthdate</StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {listeDesMembres}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </TabPanel>
-                }
-              })()}
-            
-              {(() => {
-                if (metallica.members.length !== 0) {
-                    return <TabPanel value={value} index={2}>
-              <div className={classesGrid.root}>
-                <Grid container spacing={3}>
-                  {listeDesAlbums}
-                </Grid>
-              </div>
-            </TabPanel>;
-                } else {
-                  return <TabPanel value={value} index={1}>
-              <div className={classesGrid.root}>
-                <Grid container spacing={3}>
-                  {listeDesAlbums}
-                </Grid>
-              </div>
-            </TabPanel>
-                }
-              })()}
-            
-          </Paper>
-        </CardContent>
-      {/*<CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>*/}
-    </Card>
+                            <div className={classesGrid.root}>
+                              <Grid container spacing={3}>
+                                {listeDesAlbums}
+                              </Grid>
+                            </div>
+                          </TabPanel>
+                  }
+                })()}
+          </CardContent>
+      </Card>
+    </div>
   );
 };
 

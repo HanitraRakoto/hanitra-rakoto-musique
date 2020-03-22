@@ -3,3 +3,30 @@
     margin-left: auto;
     margin-right: auto
 }
+
+.url {
+    color : rgba(0, 0, 0, 0.54);
+    text-decoration: none;
+}
+
+.url:hover {
+    text-decoration : underline;
+    color : blue;
+}
+
+.iconRetour {
+    color : white;
+}
+
+.logoAvatar {
+    background-color: white !important;
+}
+
+.urls {
+    display: flex;
+    justify-content: center;
+}
+
+.icon {
+    background-color : black !important;
+}
